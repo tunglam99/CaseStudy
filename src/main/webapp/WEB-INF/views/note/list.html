@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/note/layout :: head">
+    <meta charset="UTF-8">
+    <title>List Note</title>
+</head>
+<body>
+<a href="/create-note"> Create Note</a>
+<h1>List Note</h1>
+<form>
+    Search by first title:
+    <input name="s" type="text"/>
+    <input type="submit" value="Search"/>
+</form><br/>
+<p>
+    <a th:href="@{/note/importExcel}">Insert note from .xlsx file</a>
+</p>
+<table border="1" id="notes">
+    <tr>
+        <th>ID</th>
+        <th>Title</th>
+        <th>Content</th>
+        <th>Note Type</th>
+        <th>Edit</th>
+        <th>Delete</th>
+        <th>Views</th>
+
+    </tr>
+    <th:block th:each="note :${notes}">
+        <tr>
+            <td th:text="${note.id}"></td>
+            <td th:text="${note.title}"></td>
+            <td th:text="${note.content}"></td>
+            <td th:text="${note.noteType.name}"></td>
+            <td><a th:href="@{/edit-note/__${note.id}__}">Edit</a></td>
+            <td><a th:href="@{/delete-note/__${note.id}__}">Delete</a></td>
+            <td><a th:href="@{/view-note/__${note.id}__}">Views</a></td>
+        </tr>
+    </th:block>
+</table>
+<p>
+    <a th:href="@{/note/excel}">Export Excel</a>
+</p>
+<footer th:replace="/note/layout :: footer"></footer>
+<div>
+    <a th:href="@{'/notes'(page=${notes.number - 1})}" th:if="${notes.hasPrevious()}">Previous</a>
+    <span th:text="${notes.number + 1}"></span>/<span th:text="${notes.totalPages}"></span>
+    <a th:href="@{'/notes'(page=${notes.number + 1})}" th:if="${notes.hasNext()}">Next</a>
+</div>
+</body>
+</html>
